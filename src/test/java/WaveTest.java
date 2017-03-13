@@ -20,7 +20,7 @@ public class WaveTest {
 	    }
 	    
 	    Wave wave = new Wave(200, 120, 320);
-	    yData = wave.generateWave();
+	    yData = wave.normalBeat(false);
 	 
 	    // Create Chart
 	    XYChart chart = QuickChart.getChart("Sample Chart", "X", "Y", "y(x)", xData, yData);

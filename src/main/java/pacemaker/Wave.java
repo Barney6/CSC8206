@@ -15,7 +15,7 @@ public class Wave {
 		remainder = time-PR-QRS-ST;
 	}
 
-	public double[] generateWave(){
+	public double[] normalBeat(boolean aai){
 		for(int i=0; i<remainder; i++){
 			y[i]=0;
 		}
@@ -29,7 +29,7 @@ public class Wave {
 			y[i+remainder+PR]=0;
 		for(int i=0; i<QRS; i++){
 			int tp = QRS;
-			y[i+remainder+PR] = (1000/tp/2) * (tp/2 - Math.abs(i % (2*tp/2) - tp/2));
+			y[i+remainder+PR] = (aai ? -1 : 1)*(1000/tp/2) * (tp/2 - Math.abs(i % (2*tp/2) - tp/2));
 		}
 		
 		for(int i=0; i<ST/2; i++){
