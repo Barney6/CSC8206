@@ -13,7 +13,7 @@ import org.knowm.xchart.XYChart;
 /**
  * Creates a real-time chart using SwingWorker
  */
-public class HeartSimulator {
+public class LivePlotting {
 
   MySwingWorker mySwingWorker;
   SwingWrapper<XYChart> sw;
@@ -21,14 +21,14 @@ public class HeartSimulator {
 
   public static void main(String[] args) throws Exception {
 
-    HeartSimulator swingWorkerRealTime = new HeartSimulator();
+	LivePlotting swingWorkerRealTime = new LivePlotting();
     swingWorkerRealTime.go();
   }
 
   private void go() {
 
     // Create Chart
-    chart = QuickChart.getChart("SwingWorker XChart Real-time Demo", "Time", "Value", "randomWalk", new double[] { 0 }, new double[] { 0 });
+    chart = QuickChart.getChart("Heart Beat Demo", "Time", "Heart Beat", "randomWalk", new double[] { 0 }, new double[] { 0 });
     chart.getStyler().setLegendVisible(false);
     chart.getStyler().setXAxisTicksVisible(false);
 
@@ -43,6 +43,8 @@ public class HeartSimulator {
   private class MySwingWorker extends SwingWorker<Boolean, double[]> {
 
     LinkedList<Double> fifo = new LinkedList<Double>();
+    //double[] time = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
+    double[] heartbeat = {0.0, 0.0, 0.0, 3.0, 3.0, 3.0, 3.0, 0.0, 0.0, 0.0};
 
     public MySwingWorker() {
 
@@ -52,10 +54,12 @@ public class HeartSimulator {
     @Override
     protected Boolean doInBackground() throws Exception {
 
+      int iterator = 0;
       while (!isCancelled()) {
-
-        fifo.add(fifo.get(fifo.size() - 1) + Math.random() - .5);
-        if (fifo.size() > 500) {
+    	  
+        fifo.add(heartbeat[iterator]);
+        
+        if (fifo.size() > 40) {
           fifo.removeFirst();
         }
 
@@ -64,7 +68,13 @@ public class HeartSimulator {
           array[i] = fifo.get(i);
         }
         publish(array);
-
+        
+        iterator++;
+        if(iterator == heartbeat.length)
+        {
+        	iterator = 0;
+        }
+        	
         try {
           Thread.sleep(5);
         } catch (InterruptedException e) {
@@ -80,8 +90,6 @@ public class HeartSimulator {
     @Override
     protected void process(List<double[]> chunks) {
 
-      System.out.println("number of chunks: " + chunks.size());
-
       double[] mostRecentDataSet = chunks.get(chunks.size() - 1);
 
       chart.updateXYSeries("randomWalk", null, mostRecentDataSet, null);
@@ -90,8 +98,8 @@ public class HeartSimulator {
       long start = System.currentTimeMillis();
       long duration = System.currentTimeMillis() - start;
       try {
-        Thread.sleep(40 - duration); // 40 ms ==> 25fps
-        // Thread.sleep(400 - duration); // 40 ms ==> 2.5fps
+        //Thread.sleep(40 - duration); // 40 ms ==> 25fps
+        Thread.sleep(1000 - duration); // 40 ms ==> 2.5fps
       } catch (InterruptedException e) {
       }
 
