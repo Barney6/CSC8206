@@ -2,50 +2,35 @@ package pacemaker;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.swing.SwingWorker;
-
-import org.knowm.xchart.QuickChart;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 
-/**
- * Creates a real-time chart using SwingWorker
- */
 public class LivePlotting {
 
-	private MySwingWorker mySwingWorker;
-	private SwingWrapper<XYChart> sw;
-	private XYChart chart;
-	private List<Double> heartbeat;
-	//public int interval;
-
-	public void run() {
-		// Create Chart
-		chart = QuickChart.getChart("Heart Beat Demo", "Time", "Heart Beat", "randomWalk", new double[] { 0 },new double[] { 0 });
-		chart.getStyler().setLegendVisible(false);
-		chart.getStyler().setXAxisTicksVisible(false);
-		chart.getStyler().setYAxisTicksVisible(false);
-
-		// Show it
-		sw = new SwingWrapper<XYChart>(chart);
+	public MySwingWorker mySwingWorker;
+	public SwingWrapper<XYChart> sw;
+	public Chart chart;
+	
+	
+	public LivePlotting(String Title)
+	{
+		chart = new Chart(Title);		
+		sw = new SwingWrapper<XYChart>(chart.XYchart);
 		sw.displayChart();
-
+				
+	}
+	
+	public void run()
+	{
 		mySwingWorker = new MySwingWorker();
 		mySwingWorker.execute();
 	}
-
-	public void setHeartBeat(List<Double> yData) {
-		heartbeat = yData;
-	}
-
-	/*
-	public void setIntervalTime(int second) {
-		interval = second;
-	}
-	*/
-
-	private class MySwingWorker extends SwingWorker<Boolean, double[]> {
+	
+	
+	public class MySwingWorker extends SwingWorker<Boolean, double[]> {
+		
+		
 
 		LinkedList<Double> fifo = new LinkedList<Double>();
 
@@ -60,9 +45,9 @@ public class LivePlotting {
 			int iterator = 0;
 			while (!isCancelled()) {
 
-				fifo.add(heartbeat.get(iterator));
+				fifo.add(chart.heartbeat.get(iterator));
 
-				if (fifo.size() > heartbeat.size()) {
+				if (fifo.size() > chart.heartbeat.size()) {
 					fifo.removeFirst();
 				}
 
@@ -73,7 +58,7 @@ public class LivePlotting {
 				publish(array);
 
 				iterator++;
-				if (iterator == heartbeat.size()) {
+				if (iterator == chart.heartbeat.size()) {
 					iterator = 0;
 				}
 
@@ -87,17 +72,12 @@ public class LivePlotting {
 
 			double[] mostRecentDataSet = chunks.get(chunks.size() - 1);
 
-			chart.updateXYSeries("randomWalk", null, mostRecentDataSet, null);
+			chart.XYchart.updateXYSeries("randomWalk", null, mostRecentDataSet, null);
 			sw.repaintChart();
 
-			/*
-			try {
-				Thread.sleep(interval); // 40 ms ==> 2.5fps
-			} catch (InterruptedException e) {
-			}
-			*/
 
 		}
 	}
+
 
 }

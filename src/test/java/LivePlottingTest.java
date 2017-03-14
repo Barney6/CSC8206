@@ -1,4 +1,3 @@
-import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,9 +17,8 @@ public class LivePlottingTest {
 		Wave wave = new Wave(200, 160);
 	    yData = wave.generateSlow(1000);
 		
-		LivePlotting swingWorkerRealTime = new LivePlotting();
-		swingWorkerRealTime.setHeartBeat(yData);
-		//swingWorkerRealTime.setIntervalTime(1);
+		LivePlotting swingWorkerRealTime = new LivePlotting("HeartBeat");
+		swingWorkerRealTime.chart.setHeartBeat(yData);
 		swingWorkerRealTime.run();
 		System.in.read();
 	}
