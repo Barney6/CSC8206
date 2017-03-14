@@ -12,7 +12,8 @@ import org.knowm.xchart.XYChart;
 
 public class LivePlotting implements Runnable{
 	
-
+	private int interval = 0;
+	
 	public MySwingWorker mySwingWorker;
 	public SwingWrapper<XYChart> sw;
 	public Chart chart;
@@ -63,6 +64,10 @@ public class LivePlotting implements Runnable{
 					array[i] = fifo.get(i);
 				}
 				publish(array);
+				try {
+					Thread.sleep(interval); // 40 ms ==> 2.5fps
+				} catch (InterruptedException e) {
+				}
 
 				iterator++;
 				if (iterator == chart.heartbeat.size()) {
@@ -86,5 +91,8 @@ public class LivePlotting implements Runnable{
 		}
 	}
 
+	public void setInterval(int interval) {
+		this.interval = interval;
+	}
 
 }
