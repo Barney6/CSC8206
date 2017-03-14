@@ -1,6 +1,8 @@
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -12,9 +14,9 @@ public class LivePlottingTest {
 	@Test
 	public void test() throws IOException {
 		
-		double[] yData = new double[1000];
-		Wave wave = new Wave(200, 120, 320);
-	    yData = wave.normalBeat(false);
+		List<Integer> yData = new ArrayList<Integer>();
+		Wave wave = new Wave(200, 160);
+	    yData = wave.generateNormal();
 		
 		LivePlotting swingWorkerRealTime = new LivePlotting();
 		swingWorkerRealTime.setHeartBeat(yData);
