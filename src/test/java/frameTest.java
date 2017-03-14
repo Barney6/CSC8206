@@ -21,7 +21,7 @@ public class frameTest {
 		LivePlotting swingWorkerRealTime = new LivePlotting("HeartBeat");
 		List<Double> yData = new ArrayList<Double>();
 		Wave wave = new Wave(200, 160);
-	    yData = wave.generateSlow(1000);
+	    yData = wave.generateSlow();
 	    swingWorkerRealTime.chart.setHeartBeat(yData);
 	    swingWorkerRealTime.run();
 	    
@@ -29,7 +29,7 @@ public class frameTest {
 	    LivePlotting swingWorkerRealTime1 = new LivePlotting("HeartBeat");
 		List<Double> yData1 = new ArrayList<Double>();
 		Wave wave1 = new Wave(200, 160);
-	    yData1 = wave1.generateSlow(1000);
+	    yData1 = wave1.generateSlow();
 	    swingWorkerRealTime1.chart.setHeartBeat(yData);
 	    swingWorkerRealTime1.run();		
 		*/

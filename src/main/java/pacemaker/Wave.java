@@ -41,28 +41,18 @@ public class Wave {
 		return wave;
 	}
 	
-	public List<Double> generateFast(int time){
-		wave.clear();
-		if(time<10)
-			time=10;
-		else if(time>300)
-			time=300;
-		
-		generateFlat(time);
+	public List<Double> generateFast(){
+		generateFlat(36);
 		generateP(true);
-		generateFlat(100);
+		generateFlat(10);
 		generateQRS(true);
 		generateFlat(160);
 		generateT(true);
 		return wave;
 	}
 	
-	public List<Double> generateSlow(int time){
-		wave.clear();
-		if(time<400)
-			time=400;
-		
-		generateFlat(time);
+	public List<Double> generateSlow(){		
+		generateFlat(750);
 		generateP(true);
 		generateFlat(100);
 		generateQRS(true);
