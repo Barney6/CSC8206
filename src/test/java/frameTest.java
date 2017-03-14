@@ -25,20 +25,22 @@ public class frameTest {
 	    swingWorkerRealTime.chart.setHeartBeat(yData);
 	    swingWorkerRealTime.run();
 	    
+	    /*
 	    LivePlotting swingWorkerRealTime1 = new LivePlotting("HeartBeat");
 		List<Double> yData1 = new ArrayList<Double>();
 		Wave wave1 = new Wave(200, 160);
 	    yData1 = wave1.generateSlow(1000);
 	    swingWorkerRealTime1.chart.setHeartBeat(yData);
-	    swingWorkerRealTime1.run();
-		
+	    swingWorkerRealTime1.run();		
+		*/
+	    
 	    //initialize the Frame
 		JFrame frame = new JFrame("Just a test JFrame");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// add panel to frame
 		frame.add(swingWorkerRealTime.Jpanel,BorderLayout.NORTH);
-		frame.add(swingWorkerRealTime1.Jpanel,BorderLayout.SOUTH);
+		//frame.add(swingWorkerRealTime1.Jpanel,BorderLayout.SOUTH);
 		
 		
 		// display the frame
