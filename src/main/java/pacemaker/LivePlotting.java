@@ -1,6 +1,5 @@
 package pacemaker;
 
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,18 +14,15 @@ import org.knowm.xchart.XYChart;
  */
 public class LivePlotting {
 
-  MySwingWorker mySwingWorker;
-  SwingWrapper<XYChart> sw;
-  XYChart chart;
-
-  public static void main(String[] args) throws Exception {
-
-	LivePlotting swingWorkerRealTime = new LivePlotting();
-    swingWorkerRealTime.go();
-  }
-
-  private void go() {
-
+ private MySwingWorker mySwingWorker;
+ private SwingWrapper<XYChart> sw;
+ private XYChart chart;
+ private double[] heartbeat;
+ public int interval;
+ 
+   
+  public void run() 
+  {
     // Create Chart
     chart = QuickChart.getChart("Heart Beat Demo", "Time", "Heart Beat", "randomWalk", new double[] { 0 }, new double[] { 0 });
     chart.getStyler().setLegendVisible(false);
@@ -39,12 +35,22 @@ public class LivePlotting {
     mySwingWorker = new MySwingWorker();
     mySwingWorker.execute();
   }
+  
+  public void setHeartBeat(double[] array)
+  {
+	  heartbeat = array;	  
+  }
+  
+  public void setIntervalTime(int second)
+  {
+	  interval = second;	  
+  }
+  
 
-  private class MySwingWorker extends SwingWorker<Boolean, double[]> {
+  private class MySwingWorker extends SwingWorker<Boolean, double[]> 
+  {
 
     LinkedList<Double> fifo = new LinkedList<Double>();
-    //double[] time = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
-    double[] heartbeat = {0.0, 0.0, 0.0, 3.0, 3.0, 3.0, 3.0, 0.0, 0.0, 0.0};
 
     public MySwingWorker() {
 
@@ -59,7 +65,7 @@ public class LivePlotting {
     	  
         fifo.add(heartbeat[iterator]);
         
-        if (fifo.size() > 40) {
+        if (fifo.size() > heartbeat.length) {
           fifo.removeFirst();
         }
 
@@ -73,13 +79,6 @@ public class LivePlotting {
         if(iterator == heartbeat.length)
         {
         	iterator = 0;
-        }
-        	
-        try {
-          Thread.sleep(5);
-        } catch (InterruptedException e) {
-          // eat it. caught when interrupt is called
-          System.out.println("MySwingWorker shut down.");
         }
 
       }
@@ -95,14 +94,12 @@ public class LivePlotting {
       chart.updateXYSeries("randomWalk", null, mostRecentDataSet, null);
       sw.repaintChart();
 
-      long start = System.currentTimeMillis();
-      long duration = System.currentTimeMillis() - start;
       try {
-        //Thread.sleep(40 - duration); // 40 ms ==> 25fps
-        Thread.sleep(1000 - duration); // 40 ms ==> 2.5fps
+        Thread.sleep(interval); // 40 ms ==> 2.5fps
       } catch (InterruptedException e) {
       }
 
     }
   }
+  
 }
