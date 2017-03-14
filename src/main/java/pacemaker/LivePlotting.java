@@ -14,92 +14,86 @@ import org.knowm.xchart.XYChart;
  */
 public class LivePlotting {
 
- private MySwingWorker mySwingWorker;
- private SwingWrapper<XYChart> sw;
- private XYChart chart;
- private double[] heartbeat;
- public int interval;
- 
-   
-  public void run() 
-  {
-    // Create Chart
-    chart = QuickChart.getChart("Heart Beat Demo", "Time", "Heart Beat", "randomWalk", new double[] { 0 }, new double[] { 0 });
-    chart.getStyler().setLegendVisible(false);
-    chart.getStyler().setXAxisTicksVisible(false);
+	private MySwingWorker mySwingWorker;
+	private SwingWrapper<XYChart> sw;
+	private XYChart chart;
+	private double[] heartbeat;
+	public int interval;
 
-    // Show it
-    sw = new SwingWrapper<XYChart>(chart);
-    sw.displayChart();
+	public void run() {
+		// Create Chart
+		chart = QuickChart.getChart("Heart Beat Demo", "Time", "Heart Beat", "randomWalk", new double[] { 0 },
+				new double[] { 0 });
+		chart.getStyler().setLegendVisible(false);
+		chart.getStyler().setXAxisTicksVisible(false);
 
-    mySwingWorker = new MySwingWorker();
-    mySwingWorker.execute();
-  }
-  
-  public void setHeartBeat(double[] array)
-  {
-	  heartbeat = array;	  
-  }
-  
-  public void setIntervalTime(int second)
-  {
-	  interval = second;	  
-  }
-  
+		// Show it
+		sw = new SwingWrapper<XYChart>(chart);
+		sw.displayChart();
 
-  private class MySwingWorker extends SwingWorker<Boolean, double[]> 
-  {
+		mySwingWorker = new MySwingWorker();
+		mySwingWorker.execute();
+	}
 
-    LinkedList<Double> fifo = new LinkedList<Double>();
+	public void setHeartBeat(double[] array) {
+		heartbeat = array;
+	}
 
-    public MySwingWorker() {
+	public void setIntervalTime(int second) {
+		interval = second;
+	}
 
-      fifo.add(0.0);
-    }
+	private class MySwingWorker extends SwingWorker<Boolean, double[]> {
 
-    @Override
-    protected Boolean doInBackground() throws Exception {
+		LinkedList<Double> fifo = new LinkedList<Double>();
 
-      int iterator = 0;
-      while (!isCancelled()) {
-    	  
-        fifo.add(heartbeat[iterator]);
-        
-        if (fifo.size() > heartbeat.length) {
-          fifo.removeFirst();
-        }
+		public MySwingWorker() {
 
-        double[] array = new double[fifo.size()];
-        for (int i = 0; i < fifo.size(); i++) {
-          array[i] = fifo.get(i);
-        }
-        publish(array);
-        
-        iterator++;
-        if(iterator == heartbeat.length)
-        {
-        	iterator = 0;
-        }
+			fifo.add(0.0);
+		}
 
-      }
+		@Override
+		protected Boolean doInBackground() throws Exception {
 
-      return true;
-    }
+			int iterator = 0;
+			while (!isCancelled()) {
 
-    @Override
-    protected void process(List<double[]> chunks) {
+				fifo.add(heartbeat[iterator]);
 
-      double[] mostRecentDataSet = chunks.get(chunks.size() - 1);
+				if (fifo.size() > heartbeat.length) {
+					fifo.removeFirst();
+				}
 
-      chart.updateXYSeries("randomWalk", null, mostRecentDataSet, null);
-      sw.repaintChart();
+				double[] array = new double[fifo.size()];
+				for (int i = 0; i < fifo.size(); i++) {
+					array[i] = fifo.get(i);
+				}
+				publish(array);
 
-      try {
-        Thread.sleep(interval); // 40 ms ==> 2.5fps
-      } catch (InterruptedException e) {
-      }
+				iterator++;
+				if (iterator == heartbeat.length) {
+					iterator = 0;
+				}
 
-    }
-  }
-  
+			}
+
+			return true;
+		}
+
+		@Override
+		protected void process(List<double[]> chunks) {
+
+			double[] mostRecentDataSet = chunks.get(chunks.size() - 1);
+
+			chart.updateXYSeries("randomWalk", null, mostRecentDataSet, null);
+			sw.repaintChart();
+
+			try {
+				Thread.sleep(interval); // 40 ms ==> 2.5fps
+			} catch (InterruptedException e) {
+			}
+
+		}
+	}
+
 }

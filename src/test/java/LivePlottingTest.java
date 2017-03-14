@@ -14,7 +14,7 @@ public class LivePlottingTest {
 		
 		double[] yData = new double[1000];
 		Wave wave = new Wave(200, 120, 320);
-	    yData = wave.normalBeat(true);
+	    yData = wave.normalBeat(false);
 		
 		LivePlotting swingWorkerRealTime = new LivePlotting();
 		swingWorkerRealTime.setHeartBeat(yData);
