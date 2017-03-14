@@ -2,22 +2,29 @@ package pacemaker;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.swing.JPanel;
 import javax.swing.SwingWorker;
+
 import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.XYChart;
 
-public class LivePlotting {
+public class LivePlotting implements Runnable{
+	
 
 	public MySwingWorker mySwingWorker;
 	public SwingWrapper<XYChart> sw;
 	public Chart chart;
+	public JPanel Jpanel;
 	
+
 	
 	public LivePlotting(String Title)
 	{
-		chart = new Chart(Title);		
-		sw = new SwingWrapper<XYChart>(chart.XYchart);
-		sw.displayChart();
+		
+		chart = new Chart(Title);
+		Jpanel = new XChartPanel(chart.XYchart);
 				
 	}
 	
@@ -73,7 +80,7 @@ public class LivePlotting {
 			double[] mostRecentDataSet = chunks.get(chunks.size() - 1);
 
 			chart.XYchart.updateXYSeries("randomWalk", null, mostRecentDataSet, null);
-			sw.repaintChart();
+			Jpanel.repaint();
 
 
 		}

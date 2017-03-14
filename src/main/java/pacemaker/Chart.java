@@ -10,7 +10,6 @@ public class Chart {
 	public XYChart XYchart;
 	public List<Double> heartbeat;
 	
-	
 	public Chart(String title)
 	{
 		XYchart = QuickChart.getChart(title, "Time", "Heart Beat", "randomWalk", new double[] { 0 },new double[] { 0 });
