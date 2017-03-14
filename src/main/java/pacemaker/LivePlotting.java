@@ -1,5 +1,6 @@
 package pacemaker;
 
+import java.awt.Dimension;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import org.knowm.xchart.XYChart;
 
 public class LivePlotting implements Runnable{
 	
-	private int interval = 0;
+	private int interval = 1;
 	
 	public MySwingWorker mySwingWorker;
 	public SwingWrapper<XYChart> sw;
@@ -21,12 +22,11 @@ public class LivePlotting implements Runnable{
 	
 
 	
-	public LivePlotting(String Title)
-	{
-		
-		chart = new Chart(Title);
-		Jpanel = new XChartPanel(chart.XYchart);
-				
+	public LivePlotting()
+	{		
+		chart = new Chart();
+		Jpanel = new XChartPanel<XYChart>(chart.XYchart);
+			
 	}
 	
 	public void run()
@@ -85,6 +85,7 @@ public class LivePlotting implements Runnable{
 			double[] mostRecentDataSet = chunks.get(chunks.size() - 1);
 
 			chart.XYchart.updateXYSeries("randomWalk", null, mostRecentDataSet, null);
+			Jpanel.setSize(1270,200);
 			Jpanel.repaint();
 
 

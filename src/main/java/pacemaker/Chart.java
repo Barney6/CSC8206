@@ -10,9 +10,9 @@ public class Chart {
 	public XYChart XYchart;
 	public List<Double> heartbeat;
 	
-	public Chart(String title)
+	public Chart()
 	{
-		XYchart = QuickChart.getChart(title, "Time", "Heart Beat", "randomWalk", new double[] { 0 },new double[] { 0 });
+		XYchart = QuickChart.getChart("", "", "", "randomWalk", new double[] { 0 },new double[] { 0 });
 		XYchart.getStyler().setLegendVisible(false);
 		XYchart.getStyler().setXAxisTicksVisible(false);
 		XYchart.getStyler().setYAxisTicksVisible(false);
