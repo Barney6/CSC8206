@@ -14,13 +14,13 @@ public class LivePlottingTest {
 	@Test
 	public void test() throws IOException {
 		
-		List<Integer> yData = new ArrayList<Integer>();
+		List<Double> yData = new ArrayList<Double>();
 		Wave wave = new Wave(200, 160);
-	    yData = wave.generateNormal();
+	    yData = wave.generateSlow(1000);
 		
 		LivePlotting swingWorkerRealTime = new LivePlotting();
 		swingWorkerRealTime.setHeartBeat(yData);
-		swingWorkerRealTime.setIntervalTime(1);
+		//swingWorkerRealTime.setIntervalTime(1);
 		swingWorkerRealTime.run();
 		System.in.read();
 	}

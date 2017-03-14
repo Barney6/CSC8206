@@ -17,15 +17,15 @@ public class LivePlotting {
 	private MySwingWorker mySwingWorker;
 	private SwingWrapper<XYChart> sw;
 	private XYChart chart;
-	private double[] heartbeat;
-	public int interval;
+	private List<Double> heartbeat;
+	//public int interval;
 
 	public void run() {
 		// Create Chart
-		chart = QuickChart.getChart("Heart Beat Demo", "Time", "Heart Beat", "randomWalk", new double[] { 0 },
-				new double[] { 0 });
+		chart = QuickChart.getChart("Heart Beat Demo", "Time", "Heart Beat", "randomWalk", new double[] { 0 },new double[] { 0 });
 		chart.getStyler().setLegendVisible(false);
 		chart.getStyler().setXAxisTicksVisible(false);
+		chart.getStyler().setYAxisTicksVisible(false);
 
 		// Show it
 		sw = new SwingWrapper<XYChart>(chart);
@@ -35,13 +35,15 @@ public class LivePlotting {
 		mySwingWorker.execute();
 	}
 
-	public void setHeartBeat(double[] array) {
-		heartbeat = array;
+	public void setHeartBeat(List<Double> yData) {
+		heartbeat = yData;
 	}
 
+	/*
 	public void setIntervalTime(int second) {
 		interval = second;
 	}
+	*/
 
 	private class MySwingWorker extends SwingWorker<Boolean, double[]> {
 
@@ -58,9 +60,9 @@ public class LivePlotting {
 			int iterator = 0;
 			while (!isCancelled()) {
 
-				fifo.add(heartbeat[iterator]);
+				fifo.add(heartbeat.get(iterator));
 
-				if (fifo.size() > heartbeat.length) {
+				if (fifo.size() > heartbeat.size()) {
 					fifo.removeFirst();
 				}
 
@@ -71,7 +73,7 @@ public class LivePlotting {
 				publish(array);
 
 				iterator++;
-				if (iterator == heartbeat.length) {
+				if (iterator == heartbeat.size()) {
 					iterator = 0;
 				}
 
@@ -88,10 +90,12 @@ public class LivePlotting {
 			chart.updateXYSeries("randomWalk", null, mostRecentDataSet, null);
 			sw.repaintChart();
 
+			/*
 			try {
 				Thread.sleep(interval); // 40 ms ==> 2.5fps
 			} catch (InterruptedException e) {
 			}
+			*/
 
 		}
 	}
