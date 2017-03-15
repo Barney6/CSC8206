@@ -22,9 +22,9 @@ public class LivePlotting implements Runnable{
 	
 
 	
-	public LivePlotting()
+	public LivePlotting(String title)
 	{		
-		chart = new Chart();
+		chart = new Chart(title);
 		Jpanel = new XChartPanel<XYChart>(chart.XYchart);
 			
 	}
@@ -85,7 +85,7 @@ public class LivePlotting implements Runnable{
 			double[] mostRecentDataSet = chunks.get(chunks.size() - 1);
 
 			chart.XYchart.updateXYSeries("randomWalk", null, mostRecentDataSet, null);
-			Jpanel.setSize(1270,200);
+			Jpanel.setSize(1050,200);
 			Jpanel.repaint();
 
 
