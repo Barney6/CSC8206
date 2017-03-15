@@ -50,16 +50,17 @@ public class frameTest {
 		JPanel third_panel = new JPanel();
 		JPanel but_panel = new JPanel();
 		JPanel but_group_panel = new JPanel();
+		
 		JTextField txtfield_Butt = new JTextField();
 		
-		txtfield_Butt.setText("Battery life : 100%");
+		txtfield_Butt.setText("          Battery life : 100%             	    Current Mode: ");
 		txtfield_Butt.setPreferredSize( new Dimension( 200, 24 ) );
 		txtfield_Butt.setEditable(false);
 		
 		//set panel layout		
 		third_panel.setLayout(new BorderLayout(5,5));
 		but_panel.setLayout(new FlowLayout(1,80,40));
-		but_group_panel.setLayout(new GridLayout(2,3,5,5));
+		but_group_panel.setLayout(new GridLayout(2,3,60,40));
 		
 		
 		//set group_panel button
