@@ -26,8 +26,6 @@ public class GUI implements ActionListener{
 	public LivePlotting swingWorkerRealTime1;
 	public List<Double> yData_heartbeat;
 	public List<Double> yData_paceresponse;
-	public boolean intialize_heartBeat;
-	public boolean intialize_packmaker;
 	
 	private JButton nb = new JButton("Normal HeartBeat");
 	private JButton sinusNode = new JButton("Sinus Node Disease");
@@ -43,8 +41,6 @@ public class GUI implements ActionListener{
 	public GUI(String JframTitle)
 	{
 			//initialize output
-			intialize_heartBeat = true;
-			intialize_packmaker = true;
 		
 			//initialize the Frame
 		 	swingWorkerRealTime = new LivePlotting("HeartBeat");
@@ -55,7 +51,7 @@ public class GUI implements ActionListener{
 		 	
 		 	//initialize heart beat
 		 	wave_t = new Wave(200, 160);
-		 	yData_heartbeat = wave_t.generateSlow();
+		 	yData_heartbeat = wave_t.generateNormal();
 					 	
 			frame = new JFrame(JframTitle);
 			frame.setLayout(new GridLayout(3,0));
@@ -94,18 +90,7 @@ public class GUI implements ActionListener{
 	
 	public void runGUI()
 	{
-		// start pasing the parameter
-		if (intialize_heartBeat)
-		{
-			swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
-			swingWorkerRealTime.run();
-		}
-		
-		if (intialize_packmaker)
-		{
-			swingWorkerRealTime1.chart.setHeartBeat(yData_paceresponse);
-			swingWorkerRealTime1.run();		
-		}
+
 		
 		txtfield_Butt.setPreferredSize( new Dimension( 200, 24 ) );
 		txtfield_Butt.setEditable(false);		
@@ -129,18 +114,20 @@ public class GUI implements ActionListener{
 	
 	public void actionPerformed(ActionEvent evt) {
 		Object src = evt.getSource();
-		if(src==nb){
-				intialize_heartBeat = false;
-				yData_heartbeat = wave_t.generateNormal();
-				swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
-				swingWorkerRealTime.run();//swingWorkerRealTime is the top one and swingWorkerRealTime is the middle one
+		if(src==nb)
+			{
+					yData_heartbeat.clear();
+					swingWorkerRealTime.chart.heartbeat.clear();
+					yData_heartbeat = wave_t.generateNormal();
+					swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
+					swingWorkerRealTime.run();//swingWorkerRealTime is the top one and swingWorkerRealTime is the middle one
 			}
 			//set top wave to normal wave dataset
 		else if(src==sinusNode){
-			intialize_heartBeat = false;
-			yData_heartbeat = wave_t.generateSlow();
-			swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
-			swingWorkerRealTime.run();//swingWorkerRealTime is the top one and swingWorkerRealTime is the middle one
+				yData_heartbeat.clear();
+				yData_heartbeat = wave_t.generateSlow();
+				swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
+				swingWorkerRealTime.run();//swingWorkerRealTime is the top one and swingWorkerRealTime is the middle one
 		}
 		/*
 		else if(src==atBlock)
