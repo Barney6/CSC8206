@@ -35,6 +35,9 @@ public class LivePlotting implements Runnable{
 		mySwingWorker.execute();
 	}
 	
+	public void cancel(){
+		mySwingWorker.cancel(true);
+	}
 	
 	public class MySwingWorker extends SwingWorker<Boolean, double[]> {
 		

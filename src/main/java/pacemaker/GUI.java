@@ -14,9 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+public class GUI implements ActionListener {
 
-public class GUI implements ActionListener{
-	
 	public JFrame frame;
 	public JTextField txtfield_Butt;
 	public JPanel third_panel;
@@ -26,7 +25,7 @@ public class GUI implements ActionListener{
 	public LivePlotting swingWorkerRealTime1;
 	public List<Double> yData_heartbeat;
 	public List<Double> yData_paceresponse;
-	
+
 	private JButton nb = new JButton("Normal HeartBeat");
 	private JButton sinusNode = new JButton("Sinus Node Disease");
 	private JButton atBlock = new JButton("Atrioventricular Block");
@@ -34,112 +33,107 @@ public class GUI implements ActionListener{
 	private JButton aai = new JButton("AAI mode");
 	private JButton vdd = new JButton("VDD mode");
 	private JButton ddd = new JButton("DDD mode");
-	
+
 	private Wave wave_t;
 	private Wave wave_b;
-	
-	public GUI(String JframTitle)
-	{
-			//initialize output
-		
-			//initialize the Frame
-		 	swingWorkerRealTime = new LivePlotting("HeartBeat");
-		 	swingWorkerRealTime1 = new LivePlotting("Pacemake Response");
-		 	
-		 	yData_heartbeat = new ArrayList<Double>();
-		 	yData_paceresponse = new ArrayList<Double>();
-		 	
-		 	//initialize heart beat
-		 	wave_t = new Wave(200, 160);
-		 	yData_heartbeat = wave_t.generateNormal();
-					 	
-			frame = new JFrame(JframTitle);
-			frame.setLayout(new GridLayout(3,0));
-				
-			// add panel to frame
-			frame.add("Center",swingWorkerRealTime.Jpanel);
-			frame.add("North",swingWorkerRealTime1.Jpanel);
-			
-			txtfield_Butt = new JTextField();
-			third_panel = new JPanel();
-			but_panel = new JPanel();
-			but_group_panel = new JPanel();
-					
-			third_panel.setLayout(new BorderLayout(5,5));
-			but_panel.setLayout(new FlowLayout(1,80,40));
-			but_group_panel.setLayout(new GridLayout(2,3,60,40));
-			
-			//set group_panel button
-			but_group_panel.add(sinusNode);
-			but_group_panel.add(atBlock);
-			but_group_panel.add(atFib);
-			but_group_panel.add(aai);
-			but_group_panel.add(vdd);
-			but_group_panel.add(ddd);			
-	        but_panel.add(nb);  
-	        but_panel.add(but_group_panel);  
-	        
-	        nb.addActionListener(this);
-	        sinusNode.addActionListener(this);
-	        atBlock.addActionListener(this);
-	        atFib.addActionListener(this);
-	        aai.addActionListener(this);
-	        vdd.addActionListener(this);
-	        ddd.addActionListener(this);
-	}
-	
-	public void runGUI()
-	{
 
+	public GUI(String JframTitle) {
+		// initialize output
+
+		// initialize the Frame
+		swingWorkerRealTime = new LivePlotting("HeartBeat");
+		swingWorkerRealTime1 = new LivePlotting("Pacemake Response");
+
+		yData_heartbeat = new ArrayList<Double>();
+		yData_paceresponse = new ArrayList<Double>();
+
+		// initialize heart beat
+		wave_t = new Wave(200, 160);
+		wave_b = new Wave(200, 160);
 		
-		txtfield_Butt.setPreferredSize( new Dimension( 200, 24 ) );
-		txtfield_Butt.setEditable(false);		
-		
-        third_panel.add("North",txtfield_Butt);
-        third_panel.add("Center",but_panel);
-        		
+		yData_heartbeat = wave_t.generateNormal();
+		swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
+		swingWorkerRealTime.run();
+
+		frame = new JFrame(JframTitle);
+		frame.setLayout(new GridLayout(3, 0));
+
+		// add panel to frame
+		frame.add("Center", swingWorkerRealTime.Jpanel);
+		frame.add("North", swingWorkerRealTime1.Jpanel);
+
+		txtfield_Butt = new JTextField();
+		third_panel = new JPanel();
+		but_panel = new JPanel();
+		but_group_panel = new JPanel();
+
+		third_panel.setLayout(new BorderLayout(5, 5));
+		but_panel.setLayout(new FlowLayout(1, 80, 40));
+		but_group_panel.setLayout(new GridLayout(2, 3, 60, 40));
+
+		// set group_panel button
+		but_group_panel.add(sinusNode);
+		but_group_panel.add(atBlock);
+		but_group_panel.add(atFib);
+		but_group_panel.add(aai);
+		but_group_panel.add(vdd);
+		but_group_panel.add(ddd);
+		but_panel.add(nb);
+		but_panel.add(but_group_panel);
+
+		nb.addActionListener(this);
+		sinusNode.addActionListener(this);
+		atBlock.addActionListener(this);
+		atFib.addActionListener(this);
+		aai.addActionListener(this);
+		vdd.addActionListener(this);
+		ddd.addActionListener(this);
+	}
+
+	public void runGUI() {
+
+		txtfield_Butt.setPreferredSize(new Dimension(200, 24));
+		txtfield_Butt.setEditable(false);
+
+		third_panel.add("North", txtfield_Butt);
+		third_panel.add("Center", but_panel);
+
 		frame.add(third_panel);
 		// display the frame
-		
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);  
+		frame.setLocationRelativeTo(null);
 		frame.pack();
 		frame.setVisible(true);
 	}
-	
-	public void setTextfield(String batterylife, String cur_mode)
-	{
-		txtfield_Butt.setText("          Battery life : " +batterylife+"             		    Pacing Mode: "+cur_mode);
+
+	public void setTextfield(String batterylife, String cur_mode) {
+		txtfield_Butt.setText("          Battery life : " + batterylife
+				+ "             		    Pacing Mode: " + cur_mode);
 	}
-	
+
 	public void actionPerformed(ActionEvent evt) {
 		Object src = evt.getSource();
-		if(src==nb)
-			{
-					yData_heartbeat.clear();
-					swingWorkerRealTime.chart.heartbeat.clear();
-					yData_heartbeat = wave_t.generateNormal();
-					swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
-					swingWorkerRealTime.run();//swingWorkerRealTime is the top one and swingWorkerRealTime is the middle one
-			}
-			//set top wave to normal wave dataset
-		else if(src==sinusNode){
-				yData_heartbeat.clear();
-				yData_heartbeat = wave_t.generateSlow();
-				swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
-				swingWorkerRealTime.run();//swingWorkerRealTime is the top one and swingWorkerRealTime is the middle one
+		if (src == nb) {
+			swingWorkerRealTime.cancel();
+			yData_heartbeat = wave_t.generateNormal();
+			swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
+			swingWorkerRealTime.run();// swingWorkerRealTime is the top one and
+										// swingWorkerRealTime is the middle one
+		}
+		// set top wave to normal wave dataset
+		else if (src == sinusNode) {
+			swingWorkerRealTime.cancel();
+			yData_heartbeat = wave_t.generateSlow();
+			swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
+			swingWorkerRealTime.run();// swingWorkerRealTime is the top one and
+										// swingWorkerRealTime is the middle one
 		}
 		/*
-		else if(src==atBlock)
-			// set atril block wave
-		else if(src==atFib)
-			// set at fib
-		else if(src==aai)
-			// set aai
-		else if(src==vdd)
-			// set vdd
-		else if(src==ddd)
-		*/
+		 * else if(src==atBlock) // set atril block wave else if(src==atFib) //
+		 * set at fib else if(src==aai) // set aai else if(src==vdd) // set vdd
+		 * else if(src==ddd)
+		 */
 	}
-	
+
 }
