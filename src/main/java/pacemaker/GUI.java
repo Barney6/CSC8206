@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,13 +13,21 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 
-public class GUI {
+public class GUI implements ActionListener{
 	
 	public JFrame frame;
 	public JTextField txtfield_Butt;
 	public JPanel third_panel;
 	public JPanel but_panel;
 	public JPanel but_group_panel;
+	
+	private JButton nb = new JButton("Normal HeartBeat");
+	private JButton sinusNode = new JButton("Sinus Node Disease");
+	private JButton atBlock = new JButton("Atrioventricular Block");
+	private JButton atFib = new JButton("Atrial Fibrillation");
+	private JButton aai = new JButton("AAI mode");
+	private JButton vdd = new JButton("VDD mode");
+	private JButton ddd = new JButton("DDD mode");
 	
 	public GUI(String JframTitle, JPanel jpanel,JPanel jpanel2)
 	{
@@ -39,15 +49,22 @@ public class GUI {
 			but_group_panel.setLayout(new GridLayout(2,3,60,40));
 			
 			//set group_panel button
-			but_group_panel.add(new JButton("Sinus Node Disease"));
-			but_group_panel.add(new JButton("Atrioventricular Block"));
-			but_group_panel.add(new JButton("Atrial Fibrillation"));
-			but_group_panel.add(new JButton("AAI mode"));
-			but_group_panel.add(new JButton("VDD mode"));
-			but_group_panel.add(new JButton("DDD mode"));			
-	        but_panel.add(new JButton("Normal HeartBeat"));  
+			but_group_panel.add(sinusNode);
+			but_group_panel.add(atBlock);
+			but_group_panel.add(atFib);
+			but_group_panel.add(aai);
+			but_group_panel.add(vdd);
+			but_group_panel.add(ddd);			
+	        but_panel.add(nb);  
 	        but_panel.add(but_group_panel);  
 	        
+	        nb.addActionListener(this);
+	        sinusNode.addActionListener(this);
+	        atBlock.addActionListener(this);
+	        atFib.addActionListener(this);
+	        aai.addActionListener(this);
+	        vdd.addActionListener(this);
+	        ddd.addActionListener(this);
 	}
 	
 	public void runGUI()
@@ -71,5 +88,23 @@ public class GUI {
 	public void setTextfield(String batterylife, String cur_mode)
 	{
 		txtfield_Butt.setText("          Battery life : " +batterylife+"             		    Pacing Mode: "+cur_mode);
+	}
+
+	public void actionPerformed(ActionEvent evt) {
+		Object src = evt.getSource();
+//		if(src==nb)
+//			//set top wave to normal wave dataset
+//		else if(src==sinusNode)
+//			// set sinus wave
+//		else if(src==atBlock)
+//			// set atril block wave
+//		else if(src==atFib)
+//			// set at fib
+//		else if(src==aai)
+//			// set aai
+//		else if(src==vdd)
+//			// set vdd
+//		else if(src==ddd)
+//			// set ddd
 	}
 }
