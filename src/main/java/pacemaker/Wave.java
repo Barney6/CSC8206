@@ -72,9 +72,36 @@ public class Wave {
 		return wave;
 	}
 	
+	public List<Double> generateAVB(){
+		generateFlat(360);
+		generateP(true);
+		generateFlat(300);
+		generateQRS(true);
+		generateFlat(160);
+		generateT(true);
+		return wave;
+	}
+	
+	public List<Double> generateFIB(){
+		generateFlat(360);
+		generateLowP();
+		generateFlat(100);
+		generateQRS(true);
+		generateFlat(160);
+		generateT(true);
+		return wave;
+	}
+	
 	private void generateFlat(int time){
 		for(int i=0; i<time; i++){
 			wave.add(0.0);
+		}
+	}
+	
+	private void generateLowP(){
+		for(int i=0; i<P; i++){
+			int tp = P;
+			wave.add((double) ((20/tp/2) * (tp/2 - Math.abs(i % (2*tp/2) - tp/2))));
 		}
 	}
 	
@@ -99,8 +126,3 @@ public class Wave {
 		}
 	}
 }
-
-
-
-
-
