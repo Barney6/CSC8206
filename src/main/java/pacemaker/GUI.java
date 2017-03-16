@@ -47,14 +47,19 @@ public class GUI implements ActionListener {
 		yData_heartbeat = new ArrayList<Double>();
 		yData_paceresponse = new ArrayList<Double>();
 
+		yData_paceresponse.add(0.0);
+		yData_paceresponse.add(0.0);
+		
 		// initialize heart beat
 		wave_t = new Wave(200, 160);
 		wave_b = new Wave(200, 160);
-		
+
 		yData_heartbeat = wave_t.generateNormal();
 		swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
+		swingWorkerRealTime1.chart.setHeartBeat(yData_paceresponse);
 		swingWorkerRealTime.run();
-
+		swingWorkerRealTime1.run();
+		
 		frame = new JFrame(JframTitle);
 		frame.setLayout(new GridLayout(3, 0));
 
@@ -108,13 +113,14 @@ public class GUI implements ActionListener {
 	}
 
 	public void setTextfield(String batterylife, String cur_mode) {
-		txtfield_Butt.setText("          Battery life : " + batterylife
-				+ "             		    Pacing Mode: " + cur_mode);
+		txtfield_Butt
+				.setText("          Battery life : " + batterylife + "             		    Pacing Mode: " + cur_mode);
 	}
 
 	public void actionPerformed(ActionEvent evt) {
 		Object src = evt.getSource();
 		if (src == nb) {
+			yData_heartbeat.clear();
 			swingWorkerRealTime.cancel();
 			yData_heartbeat = wave_t.generateNormal();
 			swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
@@ -123,17 +129,28 @@ public class GUI implements ActionListener {
 		}
 		// set top wave to normal wave dataset
 		else if (src == sinusNode) {
+			yData_heartbeat.clear();
 			swingWorkerRealTime.cancel();
 			yData_heartbeat = wave_t.generateSlow();
 			swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
-			swingWorkerRealTime.run();// swingWorkerRealTime is the top one and
-										// swingWorkerRealTime is the middle one
+			swingWorkerRealTime.run();
+		} else if (src == atBlock) {
+			yData_heartbeat.clear();
+			swingWorkerRealTime.cancel();
+			yData_heartbeat = wave_t.generateAVB();
+			swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
+			swingWorkerRealTime.run();
+		} else if (src == atFib) {
+			yData_heartbeat.clear();
+			swingWorkerRealTime.cancel();
+			yData_heartbeat = wave_t.generateFIB();
+			swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
+			swingWorkerRealTime.run();
 		}
-		/*
-		 * else if(src==atBlock) // set atril block wave else if(src==atFib) //
-		 * set at fib else if(src==aai) // set aai else if(src==vdd) // set vdd
-		 * else if(src==ddd)
-		 */
+		// else if(src==aai) // set aai
+		// else if(src==vdd) // set vdd
+		// else if(src==ddd)
+
 	}
 
 }
