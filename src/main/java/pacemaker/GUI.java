@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,6 +22,11 @@ public class GUI implements ActionListener{
 	public JPanel third_panel;
 	public JPanel but_panel;
 	public JPanel but_group_panel;
+	public LivePlotting swingWorkerRealTime;
+	public LivePlotting swingWorkerRealTime1;
+	public List<Double> yData_heartbeat;
+	public List<Double> yData_paceresponse;
+	public boolean intialize;
 	
 	private JButton nb = new JButton("Normal HeartBeat");
 	private JButton sinusNode = new JButton("Sinus Node Disease");
@@ -29,15 +36,30 @@ public class GUI implements ActionListener{
 	private JButton vdd = new JButton("VDD mode");
 	private JButton ddd = new JButton("DDD mode");
 	
-	public GUI(String JframTitle, JPanel jpanel,JPanel jpanel2)
+	private Wave wave_t;
+	private Wave wave_b;
+	
+	public GUI(String JframTitle)
 	{
+			//initialize output
+			intialize = true;
+		
 			//initialize the Frame
+		 	swingWorkerRealTime = new LivePlotting("HeartBeat");
+		 	swingWorkerRealTime1 = new LivePlotting("Pacemake Response");
+		 	yData_heartbeat = new ArrayList<Double>();
+		 	yData_paceresponse = new ArrayList<Double>();
+		 	
+		 	//initialize heart beat
+		 	wave_t = new Wave(200, 160);
+		 	yData_heartbeat = wave_t.generateSlow();
+					 	
 			frame = new JFrame(JframTitle);
 			frame.setLayout(new GridLayout(3,0));
 				
 			// add panel to frame
-			frame.add("Center",jpanel);
-			frame.add("North",jpanel2);
+			frame.add("Center",swingWorkerRealTime.Jpanel);
+			frame.add("North",swingWorkerRealTime1.Jpanel);
 			
 			txtfield_Butt = new JTextField();
 			third_panel = new JPanel();
@@ -69,7 +91,16 @@ public class GUI implements ActionListener{
 	
 	public void runGUI()
 	{
-	
+		// start pasing the parameter
+		if (intialize)
+		{
+			swingWorkerRealTime1.chart.setHeartBeat(yData_heartbeat);
+			swingWorkerRealTime1.run();
+		
+			swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
+			swingWorkerRealTime.run();		
+		}
+		
 		txtfield_Butt.setPreferredSize( new Dimension( 200, 24 ) );
 		txtfield_Butt.setEditable(false);		
 		
@@ -89,22 +120,37 @@ public class GUI implements ActionListener{
 	{
 		txtfield_Butt.setText("          Battery life : " +batterylife+"             		    Pacing Mode: "+cur_mode);
 	}
-
+	
 	public void actionPerformed(ActionEvent evt) {
 		Object src = evt.getSource();
-//		if(src==nb)
-//			//set top wave to normal wave dataset
-//		else if(src==sinusNode)
-//			// set sinus wave
-//		else if(src==atBlock)
-//			// set atril block wave
-//		else if(src==atFib)
-//			// set at fib
-//		else if(src==aai)
-//			// set aai
-//		else if(src==vdd)
-//			// set vdd
-//		else if(src==ddd)
-//			// set ddd
+		if(src==nb){
+				intialize = false;
+				yData_heartbeat = wave_t.generateNormal();
+				swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
+				swingWorkerRealTime.run();//swingWorkerRealTime is the top one and swingWorkerRealTime is the middle one
+			}
+			//set top wave to normal wave dataset
+		else if(src==sinusNode){
+			intialize = false;
+			yData_heartbeat = wave_t.generateSlow();
+			swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
+			swingWorkerRealTime.run();//swingWorkerRealTime is the top one and swingWorkerRealTime is the middle one
+		}
+		else if(src==atBlock)
+			// set atril block wave
+			intialize = false;
+		else if(src==atFib)
+			// set at fib
+			intialize = false;
+		else if(src==aai)
+			// set aai
+			intialize = false;
+		else if(src==vdd)
+			// set vdd
+			intialize = false;
+		else if(src==ddd)
+
+			intialize = false;
 	}
+	
 }
