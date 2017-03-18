@@ -1,6 +1,7 @@
 package pacemaker;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -18,9 +19,10 @@ public class GUI implements ActionListener {
 
 	public JFrame frame;
 	public JTextField txtfield_Butt;
-	public JPanel third_panel;
-	public JPanel but_panel;
-	public JPanel but_group_panel;
+	public JPanel bottomPanel;
+	public JPanel HrtBtButton;
+	public JPanel ModeButton;
+	public JPanel AllButtons;
 	public LivePlotting swingWorkerRealTime;
 	public LivePlotting swingWorkerRealTime1;
 	public List<Double> yData_heartbeat;
@@ -63,23 +65,32 @@ public class GUI implements ActionListener {
 		frame.add("North", swingWorkerRealTime1.Jpanel);
 
 		txtfield_Butt = new JTextField();
-		third_panel = new JPanel();
-		but_panel = new JPanel();
-		but_group_panel = new JPanel();
+		bottomPanel = new JPanel();
+		HrtBtButton = new JPanel();
+		ModeButton = new JPanel();
+		AllButtons = new JPanel();
 
-		third_panel.setLayout(new BorderLayout(5, 5));
-		but_panel.setLayout(new FlowLayout(1, 80, 40));
-		but_group_panel.setLayout(new GridLayout(2, 3, 60, 40));
-
-		// set group_panel button
-		but_group_panel.add(sinusNode);
-		but_group_panel.add(atBlock);
-		but_group_panel.add(atFib);
-		but_group_panel.add(aai);
-		but_group_panel.add(vdd);
-		but_group_panel.add(ddd);
-		but_panel.add(nb);
-		but_panel.add(but_group_panel);
+		bottomPanel.setLayout(new BorderLayout(5, 5));
+		HrtBtButton.setLayout(new GridLayout(2, 2));//80,40
+		ModeButton.setLayout(new GridLayout(3, 0));//60,40
+		AllButtons.setLayout(new GridLayout(0, 3 ));
+		
+		// add Mode buttons	
+		ModeButton.add(aai);
+		ModeButton.add(vdd);
+		ModeButton.add(ddd);
+		
+		//add Heart Beat buttons
+		HrtBtButton.add(nb);
+		HrtBtButton.add(sinusNode);
+		HrtBtButton.add(atBlock);
+		HrtBtButton.add(atFib);
+		
+		
+		//HrtBtButton.add(ModeButton);
+		AllButtons.add(HrtBtButton);
+		AllButtons.add(ModeButton);
+		
 
 		nb.addActionListener(this);
 		sinusNode.addActionListener(this);
@@ -95,10 +106,11 @@ public class GUI implements ActionListener {
 		txtfield_Butt.setPreferredSize(new Dimension(200, 24));
 		txtfield_Butt.setEditable(false);
 
-		third_panel.add("North", txtfield_Butt);
-		third_panel.add("Center", but_panel);
+		bottomPanel.add("North", txtfield_Butt);
+		bottomPanel.add("West", AllButtons);
 
-		frame.add(third_panel);
+
+		frame.add(bottomPanel);
 		// display the frame
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -107,9 +119,14 @@ public class GUI implements ActionListener {
 		frame.setVisible(true);
 	}
 
-	public void setTextfield(String batterylife, String cur_mode) {
-		txtfield_Butt.setText("          Battery life : " + batterylife
-				+ "             		    Pacing Mode: " + cur_mode);
+	public void setTextfield(int butterylife) {
+		String life = "";
+		for( int l = 0; l < butterylife ; l++)
+		{
+			life = life + "|";
+		}
+		
+		txtfield_Butt.setText("Battery life : "+ life );
 	}
 
 	public void actionPerformed(ActionEvent evt) {
