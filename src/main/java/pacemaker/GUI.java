@@ -23,10 +23,13 @@ public class GUI implements ActionListener {
 	public JPanel HrtBtButton;
 	public JPanel ModeButton;
 	public JPanel AllButtons;
+	public JPanel Function;
 	public LivePlotting swingWorkerRealTime;
 	public LivePlotting swingWorkerRealTime1;
 	public List<Double> yData_heartbeat;
 	public List<Double> yData_paceresponse;
+	public FaultInjection fiFrame;
+	public Setting settingFrame;
 
 	private JButton nb = new JButton("Normal HeartBeat");
 	private JButton sinusNode = new JButton("Sinus Node Disease");
@@ -35,6 +38,8 @@ public class GUI implements ActionListener {
 	private JButton aai = new JButton("AAI mode");
 	private JButton vdd = new JButton("VDD mode");
 	private JButton ddd = new JButton("DDD mode");
+	private JButton set = new JButton("Setting");
+	private JButton finj = new JButton("Fault Injection");
 
 	private Wave wave_t;
 	private Wave wave_b;
@@ -45,6 +50,9 @@ public class GUI implements ActionListener {
 		// initialize the Frame
 		swingWorkerRealTime = new LivePlotting("HeartBeat");
 		swingWorkerRealTime1 = new LivePlotting("Pacemake Response");
+		fiFrame = new FaultInjection();
+		settingFrame = new Setting();
+		
 
 		yData_heartbeat = new ArrayList<Double>();
 		yData_paceresponse = new ArrayList<Double>();
@@ -69,11 +77,18 @@ public class GUI implements ActionListener {
 		HrtBtButton = new JPanel();
 		ModeButton = new JPanel();
 		AllButtons = new JPanel();
+		Function = new JPanel();
 
 		bottomPanel.setLayout(new BorderLayout(5, 5));
 		HrtBtButton.setLayout(new GridLayout(2, 2));//80,40
 		ModeButton.setLayout(new GridLayout(3, 0));//60,40
 		AllButtons.setLayout(new GridLayout(0, 3 ));
+		Function.setLayout(new GridLayout(2, 0 ));
+		
+		//add function buttons
+		Function.add(set);
+		Function.add(finj);
+		
 		
 		// add Mode buttons	
 		ModeButton.add(aai);
@@ -90,8 +105,8 @@ public class GUI implements ActionListener {
 		//HrtBtButton.add(ModeButton);
 		AllButtons.add(HrtBtButton);
 		AllButtons.add(ModeButton);
-		
-
+		AllButtons.add(Function);
+	
 		nb.addActionListener(this);
 		sinusNode.addActionListener(this);
 		atBlock.addActionListener(this);
@@ -99,6 +114,8 @@ public class GUI implements ActionListener {
 		aai.addActionListener(this);
 		vdd.addActionListener(this);
 		ddd.addActionListener(this);
+		set.addActionListener(this);
+		finj.addActionListener(this);
 	}
 
 	public void runGUI() {
@@ -108,7 +125,6 @@ public class GUI implements ActionListener {
 
 		bottomPanel.add("North", txtfield_Butt);
 		bottomPanel.add("West", AllButtons);
-
 
 		frame.add(bottomPanel);
 		// display the frame
@@ -151,6 +167,16 @@ public class GUI implements ActionListener {
 		 * set at fib else if(src==aai) // set aai else if(src==vdd) // set vdd
 		 * else if(src==ddd)
 		 */
+		  else if(src==set)
+		  {
+			  settingFrame.viewFrame();
+		  }
+		  else if(src==finj)
+		  {
+			  fiFrame.viewFrame();
+		  }
+
+
 	}
 
 }
