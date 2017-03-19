@@ -31,7 +31,7 @@ public class Setting implements ActionListener{
 		
 			//set container
 		   Container content = new Container(); 
-		   content.setBackground(Color.white); 
+		   //content.setBackground(Color.white); 
 		   content.setLayout(new GridLayout(3,2,25,20)); 
 		   
 		   

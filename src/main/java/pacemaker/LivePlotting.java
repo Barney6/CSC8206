@@ -1,6 +1,5 @@
 package pacemaker;
 
-import java.awt.Dimension;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,7 +10,7 @@ import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.XYChart;
 
-public class LivePlotting implements Runnable{
+public class LivePlotting {
 	
 	private int interval = 1;
 	
@@ -19,11 +18,11 @@ public class LivePlotting implements Runnable{
 	public SwingWrapper<XYChart> sw;
 	public Chart chart;
 	public JPanel Jpanel;
-	
-
-	
+	public boolean pause;
+		
 	public LivePlotting(String title)
-	{		
+	{	
+		pause = false;
 		chart = new Chart(title);
 		Jpanel = new XChartPanel<XYChart>(chart.XYchart);
 			
@@ -37,6 +36,14 @@ public class LivePlotting implements Runnable{
 	
 	public void cancel(){
 		mySwingWorker.cancel(true);
+	}
+	
+	public void pause(){
+		pause = true;	
+	}
+	
+	public void resume(){
+		pause = false;
 	}
 	
 	public class MySwingWorker extends SwingWorker<Boolean, double[]> {
@@ -55,6 +62,8 @@ public class LivePlotting implements Runnable{
 
 			int iterator = 0;
 			while (!isCancelled()) {
+				if(!pause)
+				{
 
 				fifo.add(chart.heartbeat.get(iterator));
 
@@ -76,6 +85,8 @@ public class LivePlotting implements Runnable{
 				if (iterator == chart.heartbeat.size()) {
 					iterator = 0;
 				}
+				}else {}
+				
 
 			}
 

@@ -40,6 +40,7 @@ public class GUI implements ActionListener {
 	private JButton ddd = new JButton("DDD mode");
 	private JButton set = new JButton("Setting");
 	private JButton finj = new JButton("Fault Injection");
+	private JButton switch_button = new JButton("On/Off");
 
 	private Wave wave_t;
 	private Wave wave_b;
@@ -69,8 +70,8 @@ public class GUI implements ActionListener {
 		frame.setLayout(new GridLayout(3, 0));
 
 		// add panel to frame
-		frame.add("Center", swingWorkerRealTime.Jpanel);
-		frame.add("North", swingWorkerRealTime1.Jpanel);
+		frame.add(swingWorkerRealTime.Jpanel);
+		frame.add(swingWorkerRealTime1.Jpanel);
 
 		txtfield_Butt = new JTextField();
 		bottomPanel = new JPanel();
@@ -81,16 +82,17 @@ public class GUI implements ActionListener {
 
 		bottomPanel.setLayout(new BorderLayout(5, 5));
 		HrtBtButton.setLayout(new GridLayout(2, 2));//80,40
-		ModeButton.setLayout(new GridLayout(3, 0));//60,40
-		AllButtons.setLayout(new GridLayout(0, 3 ));
-		Function.setLayout(new GridLayout(2, 0 ));
+		ModeButton.setLayout(new GridLayout(4, 1));//60,40
+		AllButtons.setLayout(new GridLayout(1, 4 ));
+		Function.setLayout(new GridLayout(2, 1 ));
 		
 		//add function buttons
 		Function.add(set);
 		Function.add(finj);
 		
 		
-		// add Mode buttons	
+		// add Mode buttons
+		ModeButton.add(switch_button);
 		ModeButton.add(aai);
 		ModeButton.add(vdd);
 		ModeButton.add(ddd);
@@ -116,6 +118,7 @@ public class GUI implements ActionListener {
 		ddd.addActionListener(this);
 		set.addActionListener(this);
 		finj.addActionListener(this);
+		switch_button.addActionListener(this);
 	}
 
 	public void runGUI() {
@@ -174,6 +177,17 @@ public class GUI implements ActionListener {
 		  else if(src==finj)
 		  {
 			  fiFrame.viewFrame();
+		  }
+		  else if(src==switch_button)
+		  {
+			  if(swingWorkerRealTime.pause)
+			  {
+					swingWorkerRealTime.pause();
+			  }
+			  else if(!swingWorkerRealTime.pause)
+			  {
+					swingWorkerRealTime.resume();
+			  }
 		  }
 
 
