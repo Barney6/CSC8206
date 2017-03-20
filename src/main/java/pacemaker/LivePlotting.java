@@ -25,6 +25,7 @@ public class LivePlotting {
 		pause = false;
 		chart = new Chart(title);
 		Jpanel = new XChartPanel<XYChart>(chart.XYchart);
+		//Jpanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), title));
 			
 	}
 	

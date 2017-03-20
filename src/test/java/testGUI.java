@@ -9,7 +9,7 @@ public class testGUI {
 	public void test() throws IOException {
 
 		GUI gui = new GUI("");
-		gui.setTextfield(200);
+		//gui.setTextfield(200);
 		gui.runGUI();
 		System.in.read();
 

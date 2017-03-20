@@ -2,6 +2,7 @@ package pacemaker;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -13,12 +14,16 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class GUI implements ActionListener {
 
 	public JFrame frame;
-	public JTextField txtfield_Butt;
+	public JProgressBar butteryL;
 	public JPanel bottomPanel;
 	public JPanel HrtBtButton;
 	public JPanel ModeButton;
@@ -30,6 +35,9 @@ public class GUI implements ActionListener {
 	public List<Double> yData_paceresponse;
 	public FaultInjection fiFrame;
 	public Setting settingFrame;
+	public Container buttery;
+	public Timer timer;
+	public JButton example_button;
 
 	private JButton nb = new JButton("Normal HeartBeat");
 	private JButton sinusNode = new JButton("Sinus Node Disease");
@@ -73,7 +81,7 @@ public class GUI implements ActionListener {
 		frame.add(swingWorkerRealTime.Jpanel);
 		frame.add(swingWorkerRealTime1.Jpanel);
 
-		txtfield_Butt = new JTextField();
+		butteryL = new JProgressBar();
 		bottomPanel = new JPanel();
 		HrtBtButton = new JPanel();
 		ModeButton = new JPanel();
@@ -103,6 +111,26 @@ public class GUI implements ActionListener {
 		HrtBtButton.add(atBlock);
 		HrtBtButton.add(atFib);
 		
+		//create buttery
+		buttery = new Container();
+		buttery.setLayout(new BorderLayout()); 
+		
+		
+		//create buttery bar
+		butteryL = new JProgressBar();  
+		butteryL.setMinimum(0);  
+		butteryL.setMaximum(100);  
+		butteryL.setValue(100);  
+		butteryL.setStringPainted(true);  
+		//butteryL.addChangeListener(this);  
+		butteryL.setPreferredSize(new Dimension(200, 30));
+		
+		//add buttery bar to container
+		timer = new Timer(50, this); 		
+		example_button = new JButton("On/Off");
+		buttery.add("Center",butteryL);
+		buttery.add("East",example_button);
+		example_button.addActionListener(this);
 		
 		//HrtBtButton.add(ModeButton);
 		AllButtons.add(HrtBtButton);
@@ -123,10 +151,7 @@ public class GUI implements ActionListener {
 
 	public void runGUI() {
 
-		txtfield_Butt.setPreferredSize(new Dimension(200, 24));
-		txtfield_Butt.setEditable(false);
-
-		bottomPanel.add("North", txtfield_Butt);
+		bottomPanel.add("North", buttery);
 		bottomPanel.add("West", AllButtons);
 
 		frame.add(bottomPanel);
@@ -138,16 +163,7 @@ public class GUI implements ActionListener {
 		frame.setVisible(true);
 	}
 
-	public void setTextfield(int butterylife) {
-		String life = "";
-		for( int l = 0; l < butterylife ; l++)
-		{
-			life = life + "|";
-		}
-		
-		txtfield_Butt.setText("Battery life : "+ life );
-	}
-
+	
 	public void actionPerformed(ActionEvent evt) {
 		Object src = evt.getSource();
 		if (src == nb) {
@@ -178,19 +194,33 @@ public class GUI implements ActionListener {
 		  {
 			  fiFrame.viewFrame();
 		  }
-		  else if(src==switch_button)
+		  else if(src==switch_button)//pasue and resume
 		  {
-			  if(swingWorkerRealTime.pause)
+			  if(!swingWorkerRealTime.pause)
 			  {
 					swingWorkerRealTime.pause();
 			  }
-			  else if(!swingWorkerRealTime.pause)
+			  else if(swingWorkerRealTime.pause)
 			  {
 					swingWorkerRealTime.resume();
 			  }
-		  }
+		  }else if(src==example_button) 
+		  {
+			  timer.start();		  		  
+		  }else if (src == timer) {  
+	            int value = butteryL.getValue();  
+	            if (value > 0) {  
+	                value--;  
+	                butteryL.setValue(value);  
+	            }
+	            if(value<10){
+	                vdd.setEnabled(false);
+	                ddd.setEnabled(false);                
+	                // anything that can be require when buttery is lower than 10 is implement here
+	                
+	            }       
+	        }  
 
 
 	}
-
 }
