@@ -61,12 +61,11 @@ public class Wave {
 		return wave;
 	}
 	
-	public List<Double> generateAAI(){
-		wave.clear();
-		generateFlat(360);
+	public List<Double> generateSinus(){		
+		generateFlat(750);
 		generateP(true);
 		generateFlat(100);
-		generateQRS(false);
+		generateQRS(true);
 		generateFlat(160);
 		generateT(true);
 		return wave;

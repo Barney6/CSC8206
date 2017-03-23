@@ -30,10 +30,6 @@ public class LivePlottingTest {
 		lp.setInterval(1);
 		lp.run();
 		
-//		lps.setHeartBeat(slwoData);
-//		lps.setInterval(1);
-//		lps.run();
-//		
 		System.in.read();
 	}
 

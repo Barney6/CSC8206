@@ -61,7 +61,6 @@ public class GUI implements ActionListener {
 		swingWorkerRealTime1 = new LivePlotting("Pacemake Response");
 		fiFrame = new FaultInjection();
 		settingFrame = new Setting();
-		
 
 		yData_heartbeat = new ArrayList<Double>();
 		yData_paceresponse = new ArrayList<Double>();
@@ -69,7 +68,7 @@ public class GUI implements ActionListener {
 		// initialize heart beat
 		wave_t = new Wave(200, 160);
 		wave_b = new Wave(200, 160);
-		
+
 		yData_heartbeat = wave_t.generateNormal();
 		swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
 		swingWorkerRealTime.run();
@@ -89,54 +88,52 @@ public class GUI implements ActionListener {
 		Function = new JPanel();
 
 		bottomPanel.setLayout(new BorderLayout(5, 5));
-		HrtBtButton.setLayout(new GridLayout(2, 2));//80,40
-		ModeButton.setLayout(new GridLayout(4, 1));//60,40
-		AllButtons.setLayout(new GridLayout(1, 4 ));
-		Function.setLayout(new GridLayout(2, 1 ));
-		
-		//add function buttons
+		HrtBtButton.setLayout(new GridLayout(2, 2));// 80,40
+		ModeButton.setLayout(new GridLayout(4, 1));// 60,40
+		AllButtons.setLayout(new GridLayout(1, 4));
+		Function.setLayout(new GridLayout(2, 1));
+
+		// add function buttons
 		Function.add(set);
 		Function.add(finj);
-		
-		
+
 		// add Mode buttons
 		ModeButton.add(switch_button);
 		ModeButton.add(aai);
 		ModeButton.add(vdd);
 		ModeButton.add(ddd);
-		
-		//add Heart Beat buttons
+
+		// add Heart Beat buttons
 		HrtBtButton.add(nb);
 		HrtBtButton.add(sinusNode);
 		HrtBtButton.add(atBlock);
 		HrtBtButton.add(atFib);
-		
-		//create buttery
+
+		// create buttery
 		buttery = new Container();
-		buttery.setLayout(new BorderLayout()); 
-		
-		
-		//create buttery bar
-		butteryL = new JProgressBar();  
-		butteryL.setMinimum(0);  
-		butteryL.setMaximum(100);  
-		butteryL.setValue(100);  
-		butteryL.setStringPainted(true);  
-		//butteryL.addChangeListener(this);  
+		buttery.setLayout(new BorderLayout());
+
+		// create buttery bar
+		butteryL = new JProgressBar();
+		butteryL.setMinimum(0);
+		butteryL.setMaximum(100);
+		butteryL.setValue(100);
+		butteryL.setStringPainted(true);
+		// butteryL.addChangeListener(this);
 		butteryL.setPreferredSize(new Dimension(200, 30));
-		
-		//add buttery bar to container
-		timer = new Timer(50, this); 		
+
+		// add buttery bar to container
+		timer = new Timer(50, this);
 		example_button = new JButton("On/Off");
-		buttery.add("Center",butteryL);
-		buttery.add("East",example_button);
+		buttery.add("Center", butteryL);
+		buttery.add("East", example_button);
 		example_button.addActionListener(this);
-		
-		//HrtBtButton.add(ModeButton);
+
+		// HrtBtButton.add(ModeButton);
 		AllButtons.add(HrtBtButton);
 		AllButtons.add(ModeButton);
 		AllButtons.add(Function);
-	
+
 		nb.addActionListener(this);
 		sinusNode.addActionListener(this);
 		atBlock.addActionListener(this);
@@ -163,64 +160,70 @@ public class GUI implements ActionListener {
 		frame.setVisible(true);
 	}
 
-	
 	public void actionPerformed(ActionEvent evt) {
 		Object src = evt.getSource();
 		if (src == nb) {
 			swingWorkerRealTime.cancel();
+			yData_heartbeat.clear();
 			yData_heartbeat = wave_t.generateNormal();
 			swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
-			swingWorkerRealTime.run();// swingWorkerRealTime is the top one and
-										// swingWorkerRealTime is the middle one
+			swingWorkerRealTime.run();
 		}
 		// set top wave to normal wave dataset
 		else if (src == sinusNode) {
 			swingWorkerRealTime.cancel();
-			yData_heartbeat = wave_t.generateSlow();
+			yData_heartbeat.clear();
+			yData_heartbeat = wave_t.generateSinus();
 			swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
-			swingWorkerRealTime.run();// swingWorkerRealTime is the top one and
-										// swingWorkerRealTime is the middle one
+			swingWorkerRealTime.run();
+		} else if (src == atBlock) {
+			swingWorkerRealTime.cancel();
+			yData_heartbeat.clear();
+			yData_heartbeat = wave_t.generateAVB();
+			swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
+			swingWorkerRealTime.run();
+		}else if (src == atFib) {
+			swingWorkerRealTime.cancel();
+			yData_heartbeat.clear();
+			yData_heartbeat = wave_t.generateFIB();
+			swingWorkerRealTime.chart.setHeartBeat(yData_heartbeat);
+			swingWorkerRealTime.run();
 		}
+		
+		
 		/*
-		 * else if(src==atBlock) // set atril block wave else if(src==atFib) //
-		 * set at fib else if(src==aai) // set aai else if(src==vdd) // set vdd
-		 * else if(src==ddd)
+		 * set at fib else if(src==aai)
+		 * set aai else if(src==vdd) // set vdd
+		 * /* else if(src==ddd)
 		 */
-		  else if(src==set)
-		  {
-			  settingFrame.viewFrame();
-		  }
-		  else if(src==finj)
-		  {
-			  fiFrame.viewFrame();
-		  }
-		  else if(src==switch_button)//pasue and resume
-		  {
-			  if(!swingWorkerRealTime.pause)
-			  {
-					swingWorkerRealTime.pause();
-			  }
-			  else if(swingWorkerRealTime.pause)
-			  {
-					swingWorkerRealTime.resume();
-			  }
-		  }else if(src==example_button) 
-		  {
-			  timer.start();		  		  
-		  }else if (src == timer) {  
-	            int value = butteryL.getValue();  
-	            if (value > 0) {  
-	                value--;  
-	                butteryL.setValue(value);  
-	            }
-	            if(value<10){
-	                vdd.setEnabled(false);
-	                ddd.setEnabled(false);                
-	                // anything that can be require when buttery is lower than 10 is implement here
-	                
-	            }       
-	        }  
+		else if (src == set) {
+			settingFrame.viewFrame();
+		} else if (src == finj) {
+			fiFrame.viewFrame();
+		} else if (src == switch_button)// pasue and resume
+		{
+			if (!swingWorkerRealTime.pause) {
+				swingWorkerRealTime.pause();
+			} else if (swingWorkerRealTime.pause) {
+				swingWorkerRealTime.resume();
+			}
+		} else if (src == example_button) {
+			timer.start();
+		} else if (src == timer) {
+			int value = butteryL.getValue();
+			if (value > 0) {
+				value--;
+				butteryL.setValue(value);
+			}
+			if (value < 10) {
+				vdd.setEnabled(false);
+				ddd.setEnabled(false);
+				// anything that can be require when buttery is lower than 10 is
+				// implement here
 
+			}
+		}
 
 	}
+
 }
